@@ -40,8 +40,8 @@ public class Mine : MonoBehaviour {
 	private void Buy(string type){
 		// base cost * (gps + miner.gps) / miner.gps
 		//this is how cookie clicker calculates cost
-		int cost = gameManager.miners [type].Cost * (goldPerSecond + gameManager.miners [type].GPS) / gameManager.miners [type].GPS;
-		if (gameManager.Buy (cost))
+		double cost = gameManager.miners [type].Cost * (goldPerSecond + gameManager.miners [type].GPS) / gameManager.miners [type].GPS;
+		if (gameManager.Buy ((int)cost))
 			minersCount [type]++;
 	}
 }
