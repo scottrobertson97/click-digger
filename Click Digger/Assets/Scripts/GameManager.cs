@@ -7,6 +7,9 @@ public class GameManager : MonoBehaviour {
 	private double gold = 0;
 	private int goldDisplayed = 0;
 	private double goldPerSecond = 0;
+	private double clickMultiplier = 1;
+
+	private int currentMineIndex;
 	private List<Mine> mines;
 
 	public struct Miner {
@@ -36,6 +39,8 @@ public class GameManager : MonoBehaviour {
 	// Usethis for initialization
 	void Start () {
 		this.mines = new List<Mine> ();
+		mines.Add (new Mine ());
+		currentMineIndex = 0; 
 	}
 	
 	// Update is called once per frame
@@ -64,5 +69,25 @@ public class GameManager : MonoBehaviour {
 		} else {
 			return false;
 		}
+	}
+
+	/// <summary>
+	/// Gain the money from selling
+	/// </summary>
+	/// <param name="cost">Cost.</param>
+	public void Sell(double cost){
+		this.gold += cost;
+	}
+
+	public Mine GetCurrentMine(){
+		return mines[currentMineIndex];
+	}
+
+	public void Click(){
+		
+	}
+
+	public void test(string type){
+		
 	}
 }
