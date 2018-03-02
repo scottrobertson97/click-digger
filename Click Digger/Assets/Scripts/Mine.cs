@@ -69,9 +69,14 @@ public class Mine : MonoBehaviour {
 	/// </summary>
 	/// <returns>The cost.</returns>
 	/// <param name="type">Type.</param>
-	private double CalculateCost(string type){
+	public double CalculateCost(string type){
 		// base cost * (gps + miner.gps) / miner.gps
 		//this is how cookie clicker calculates cost
-		return gameManager.miners [type].Cost * (goldPerSecond + gameManager.miners [type].GPS) / gameManager.miners [type].GPS;
+		//return gameManager.miners [type].Cost * (goldPerSecond + gameManager.miners [type].GPS) / gameManager.miners [type].GPS;
+		return gameManager.miners [type].Cost * (minersCount[type] + 1) /2;
+	}
+
+	public int GetAmountOfType(string type){
+		return minersCount [type];
 	}
 }

@@ -1,26 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
 	public GameObject clickPanelPrefab;
+	public GameObject content;
+	public GameObject gpsText;
+	public GameObject goldText;
+	public GameObject clickText;
+
+
 	private GameManager gameManager;
 
 	// Use this for initialization
 	void Start () {
 		gameManager = GameObject.Find ("GameManager").GetComponent<GameManager> ();
+
+		foreach (string type in gameManager.miners.Keys) {
+			GameObject panel = Instantiate (clickPanelPrefab, content.transform);
+			panel.GetComponent<ClickPanel> ().Initialize (type);
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
-
-	public void Buy(){
-		//
-		GameObject button = EventSystem.current.currentSelectedGameObject;
-		string type = button.transform.parent.gameObject.name;
-		//gameManager.GetCurrentMine.Buy (type);
+		gpsText.GetComponent<Text>().text = gameManager.GoldPerSecond + " Gps";
+		goldText.GetComponent<Text> ().text = gameManager.GoldDisplayed + " Gold";
+		clickText.GetComponent<Text> ().text = "+" + gameManager.ClickMultiplier + " Gold";
 	}
 }

@@ -31,6 +31,11 @@ public class GameManager : MonoBehaviour {
 		}
 	};
 
+	public int GoldDisplayed{ get { return this.goldDisplayed; } }
+	public double GoldPerSecond{ get { return this.goldPerSecond; } }
+	public double ClickMultiplier{ get { return this.clickMultiplier; } }
+	public Mine CurrentMine{ get { return mines [currentMineIndex]; } }
+
 	public Dictionary<string, Miner> miners = new Dictionary<string, Miner>{
 		{"basic", new Miner(1, 10)},
 		{"advanced", new Miner(10, 100)}
@@ -39,13 +44,14 @@ public class GameManager : MonoBehaviour {
 	// Usethis for initialization
 	void Start () {
 		this.mines = new List<Mine> ();
-		mines.Add (new Mine ());
+		Mine m = gameObject.AddComponent<Mine> () as Mine;
+		mines.Add (m);
 		currentMineIndex = 0; 
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		goldDisplayed = (int)gold;
 	}
 
 	/// <summary>
@@ -55,6 +61,7 @@ public class GameManager : MonoBehaviour {
 	public void Earn(double earned){
 		this.goldEarned += earned;
 		this.gold += earned;
+		goldPerSecond = earned / Time.deltaTime;
 	}
 
 	/// <summary>
@@ -63,7 +70,7 @@ public class GameManager : MonoBehaviour {
 	/// </summary>
 	/// <param name="cost">Cost.</param>
 	public bool Buy(double cost){
-		if (cost < this.gold) {
+		if (cost <= this.gold) {
 			this.gold -= cost;
 			return true;
 		} else {
@@ -79,12 +86,8 @@ public class GameManager : MonoBehaviour {
 		this.gold += cost;
 	}
 
-	public Mine GetCurrentMine(){
-		return mines[currentMineIndex];
-	}
-
 	public void Click(){
-		
+		this.gold += this.clickMultiplier;
 	}
 
 	public void test(string type){
