@@ -28,4 +28,8 @@ public class ClickPanel : MonoBehaviour {
 	public void Buy(){
 		gameManager.CurrentMine.Buy (type);
 	}
+
+	public void Sell(){
+		gameManager.CurrentMine.Sell (type);
+	}
 }

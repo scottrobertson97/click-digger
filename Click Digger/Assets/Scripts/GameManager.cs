@@ -37,8 +37,9 @@ public class GameManager : MonoBehaviour {
 	public Mine CurrentMine{ get { return mines [currentMineIndex]; } }
 
 	public Dictionary<string, Miner> miners = new Dictionary<string, Miner>{
-		{"basic", new Miner(1, 10)},
-		{"advanced", new Miner(10, 100)}
+		{"Dwarf", new Miner(1, 10)},
+		{"Big Dwarf", new Miner(10, 100)},
+		{"Digging Machine", new Miner(100, 1000)}
 	};
 
 	// Usethis for initialization

@@ -55,12 +55,12 @@ public class Mine : MonoBehaviour {
 	/// </summary>
 	/// <param name="type">Type.</param>
 	public void Sell(string type){
-		//if we have miners to sell
+		//if we have miners to sell 
 		if (minersCount [type] > 0) {
 			//sell it
 			minersCount [type]--;
 			//get 80% of the cost back
-			gameManager.Sell (CalculateCost (type) * 0.8);
+			gameManager.Sell (CalculateCost (type) * 0.5);
 		}
 	}
 
