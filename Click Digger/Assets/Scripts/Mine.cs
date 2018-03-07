@@ -10,6 +10,8 @@ public class Mine : MonoBehaviour {
 	private GameManager gameManager;
 	private double goldPerSecond = 0;
 
+	public double GoldPerSecond { get { return goldPerSecond; } }
+
 	// Use this for initialization
 	void Start () {
 		gameManager = GameObject.Find ("GameManager").GetComponent<GameManager> ();

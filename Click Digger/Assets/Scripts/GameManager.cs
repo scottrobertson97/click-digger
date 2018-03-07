@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
+	#region Private Variables
 	private double goldEarned = 0;
 	private double gold = 0;
 	private int goldDisplayed = 0;
 	private double goldPerSecond = 0;
 	private double clickMultiplier = 1;
-
 	private int currentMineIndex;
 	private List<Mine> mines;
+	#endregion
 
 	public struct Miner {
 		private double gps;
@@ -31,10 +32,12 @@ public class GameManager : MonoBehaviour {
 		}
 	};
 
+	#region Properties
 	public int GoldDisplayed{ get { return this.goldDisplayed; } }
 	public double GoldPerSecond{ get { return this.goldPerSecond; } }
 	public double ClickMultiplier{ get { return this.clickMultiplier; } }
 	public Mine CurrentMine{ get { return mines [currentMineIndex]; } }
+	#endregion
 
 	public Dictionary<string, Miner> miners = new Dictionary<string, Miner>{
 		{"Dwarf", new Miner(1, 10)},
@@ -45,14 +48,30 @@ public class GameManager : MonoBehaviour {
 	// Usethis for initialization
 	void Start () {
 		this.mines = new List<Mine> ();
-		Mine m = gameObject.AddComponent<Mine> () as Mine;
-		mines.Add (m);
+		CreateMine ();
 		currentMineIndex = 0; 
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		goldDisplayed = (int)gold;
+
+		goldPerSecond = 0;
+		foreach (Mine m in mines) {
+			goldPerSecond += m.GoldPerSecond;
+		}
+
+		#if UNITY_EDITOR
+		if(Input.GetKeyDown(KeyCode.B)){
+			CreateMine();
+		}
+		if(Input.GetKeyDown(KeyCode.RightArrow)){
+			GoToMineAtIndex(currentMineIndex + 1);
+		}
+		if(Input.GetKeyDown(KeyCode.LeftArrow)){
+			GoToMineAtIndex(currentMineIndex - 1);
+		}
+		#endif
 	}
 
 	/// <summary>
@@ -62,7 +81,6 @@ public class GameManager : MonoBehaviour {
 	public void Earn(double earned){
 		this.goldEarned += earned;
 		this.gold += earned;
-		goldPerSecond = earned / Time.deltaTime;
 	}
 
 	/// <summary>
@@ -91,7 +109,14 @@ public class GameManager : MonoBehaviour {
 		this.gold += this.clickMultiplier;
 	}
 
-	public void test(string type){
-		
+	public void CreateMine(){
+		Mine m = gameObject.AddComponent<Mine> () as Mine;
+		mines.Add (m);
 	}
+
+	public void GoToMineAtIndex(int index){
+		if (index >= 0 && index < mines.Count)
+			currentMineIndex = index;
+	}
+
 }
