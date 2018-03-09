@@ -15,13 +15,6 @@ public class Mine : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		gameManager = GameObject.Find ("GameManager").GetComponent<GameManager> ();
-
-		//fill this dictionary with the same keys from the gameManager.miners
-		minersCount = new Dictionary<string, int> ();
-		foreach (string type in gameManager.miners.Keys) {
-			//set their counts to 0
-			minersCount.Add (type, 0);
-		}
 	}
 
 	// Update is called once per frame
@@ -80,5 +73,14 @@ public class Mine : MonoBehaviour {
 
 	public int GetAmountOfType(string type){
 		return minersCount [type];
+	}
+
+	public void Init(){
+		//fill this dictionary with the same keys from the gameManager.miners
+		minersCount = new Dictionary<string, int> ();
+		foreach (string type in gameManager.miners.Keys) {
+			//set their counts to 0
+			minersCount.Add (type, 0);
+		}
 	}
 }

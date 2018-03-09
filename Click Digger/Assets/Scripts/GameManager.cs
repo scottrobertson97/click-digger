@@ -76,6 +76,7 @@ public class GameManager : MonoBehaviour {
 		this.mines = new List<Mine> ();
 		CreateMine ();
 		currentMineIndex = 0;
+		CurrentMine.Init ();
 		GameObject.Find ("UIManager").GetComponent<UIManager> ().Init ();
 	}
 	
@@ -169,6 +170,8 @@ public class GameManager : MonoBehaviour {
 		case Stage.Galaxy:
 			break;
 		}
+
 		GameObject.Find ("UIManager").GetComponent<UIManager> ().Init ();
+		CurrentMine.Init ();
 	}
 }
