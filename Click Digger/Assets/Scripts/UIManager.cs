@@ -16,11 +16,6 @@ public class UIManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		gameManager = GameObject.Find ("GameManager").GetComponent<GameManager> ();
-
-		foreach (string type in gameManager.miners.Keys) {
-			GameObject panel = Instantiate (clickPanelPrefab, content.transform);
-			panel.GetComponent<ClickPanel> ().Initialize (type);
-		}
 	}
 	
 	// Update is called once per frame
@@ -28,5 +23,19 @@ public class UIManager : MonoBehaviour {
 		gpsText.GetComponent<Text>().text = gameManager.GoldPerSecond + " Gps";
 		goldText.GetComponent<Text> ().text = gameManager.GoldDisplayed + " Gold";
 		clickText.GetComponent<Text> ().text = "+" + gameManager.ClickMultiplier + " Gold";
+	}
+
+	/// <summary>
+	/// Delete all the panels, and create new ones
+	/// </summary>
+	public void Init(){
+		//foreach (Transform panel in content.transform) {
+		//	GameObject.Destroy(panel.gameObject);
+		//}
+
+		foreach (string type in gameManager.miners.Keys) {
+			GameObject panel = Instantiate (clickPanelPrefab, content.transform);
+			panel.GetComponent<ClickPanel> ().Initialize (type);
+		}
 	}
 }

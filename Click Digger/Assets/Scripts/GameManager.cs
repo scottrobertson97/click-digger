@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour {
 	private double clickMultiplier = 1;
 	private int currentMineIndex;
 	private List<Mine> mines;
+	private enum Stage {Mine, Planet, Solarsystem, Galaxy};
+	private Stage stage;
 	#endregion
 
 	public struct Miner {
@@ -39,17 +41,42 @@ public class GameManager : MonoBehaviour {
 	public Mine CurrentMine{ get { return mines [currentMineIndex]; } }
 	#endregion
 
-	public Dictionary<string, Miner> miners = new Dictionary<string, Miner>{
+	public Dictionary<string, Miner> miners;
+
+	#region Miners
+	public Dictionary<string, Miner> minersMine = new Dictionary<string, Miner>{
 		{"Dwarf", new Miner(1, 10)},
 		{"Big Dwarf", new Miner(10, 100)},
 		{"Digging Machine", new Miner(100, 1000)}
 	};
 
+	public Dictionary<string, Miner> minersPlanet = new Dictionary<string, Miner>{
+		{"City Boring Machine", new Miner(1, 10)},
+		{"Island Leveler", new Miner(10, 100)},
+		{"Continent Eater", new Miner(100, 1000)}
+	};
+
+	public Dictionary<string, Miner> minersSolarsystem = new Dictionary<string, Miner>{
+		{"Orbital Mining Lazer", new Miner(1, 10)},
+		{"Planet Grinder", new Miner(10, 100)},
+		{"Anit-Matter Explosive Crew", new Miner(100, 1000)}
+	};
+
+	public Dictionary<string, Miner> minersGalaxy = new Dictionary<string, Miner>{
+		{"Gravity Wave Extractor", new Miner(1, 10)},
+		{"Black Hole", new Miner(10, 100)},
+		{"Tesseract", new Miner(100, 1000)}
+	};
+	#endregion
+
 	// Usethis for initialization
 	void Start () {
+		stage = Stage.Mine;
+		miners = new Dictionary<string, Miner> (minersMine);
 		this.mines = new List<Mine> ();
 		CreateMine ();
-		currentMineIndex = 0; 
+		currentMineIndex = 0;
+		GameObject.Find ("UIManager").GetComponent<UIManager> ().Init ();
 	}
 	
 	// Update is called once per frame
@@ -70,6 +97,9 @@ public class GameManager : MonoBehaviour {
 		}
 		if(Input.GetKeyDown(KeyCode.LeftArrow)){
 			GoToMineAtIndex(currentMineIndex - 1);
+		}
+		if(Input.GetKeyDown(KeyCode.A)){
+			AdvanceStage();
 		}
 		#endif
 	}
@@ -119,4 +149,26 @@ public class GameManager : MonoBehaviour {
 			currentMineIndex = index;
 	}
 
+	public void AdvanceStage(){
+		switch (stage) {
+		case Stage.Mine:
+			stage = Stage.Planet;
+			//miners = minersPlanet;
+			miners = new Dictionary<string, Miner> (minersPlanet);
+			break;
+		case Stage.Planet:
+			stage = Stage.Solarsystem;
+			//miners = minersSolarsystem;
+			miners = new Dictionary<string, Miner> (minersSolarsystem);
+			break;
+		case Stage.Solarsystem:
+			stage = Stage.Galaxy;
+			//miners = minersGalaxy;
+			miners = new Dictionary<string, Miner> (minersGalaxy);
+			break;
+		case Stage.Galaxy:
+			break;
+		}
+		GameObject.Find ("UIManager").GetComponent<UIManager> ().Init ();
+	}
 }
