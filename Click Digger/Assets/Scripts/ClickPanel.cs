@@ -18,7 +18,7 @@ public class ClickPanel : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		amountText.GetComponent<Text> ().text = gameManager.CurrentMine.GetAmountOfType (this.type) + " " + this.type + "s";
-		gpsText.GetComponent<Text> ().text = gameManager.miners[this.type].GPS + " Gps";
+		gpsText.GetComponent<Text> ().text = gameManager.Miners[this.type].GPS + " Gps";
 	}
 
 	public void Initialize (string type){

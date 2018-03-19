@@ -15,6 +15,7 @@ public class Mine : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		gameManager = GameObject.Find ("GameManager").GetComponent<GameManager> ();
+		Init ();
 	}
 
 	// Update is called once per frame
@@ -29,7 +30,7 @@ public class Mine : MonoBehaviour {
 		goldPerSecond = 0;
 		//summ the GPS of all the miners
 		foreach (string type in minersCount.Keys) {
-			goldPerSecond += minersCount [type] * gameManager.miners [type].GPS;
+			goldPerSecond += minersCount [type] * gameManager.Miners [type].GPS;
 		}
 		gameManager.Earn (goldPerSecond * Time.deltaTime);
 	}
@@ -68,7 +69,7 @@ public class Mine : MonoBehaviour {
 		// base cost * (gps + miner.gps) / miner.gps
 		//this is how cookie clicker calculates cost
 		//return gameManager.miners [type].Cost * (goldPerSecond + gameManager.miners [type].GPS) / gameManager.miners [type].GPS;
-		return gameManager.miners [type].Cost * (minersCount[type] + 1) /2;
+		return gameManager.Miners [type].Cost * (minersCount[type] + 1) /2;
 	}
 
 	public int GetAmountOfType(string type){
@@ -77,8 +78,8 @@ public class Mine : MonoBehaviour {
 
 	public void Init(){
 		//fill this dictionary with the same keys from the gameManager.miners
-		minersCount = new Dictionary<string, int> ();
-		foreach (string type in gameManager.miners.Keys) {
+		this.minersCount = new Dictionary<string, int> ();
+		foreach (string type in gameManager.Miners.Keys) {
 			//set their counts to 0
 			minersCount.Add (type, 0);
 		}

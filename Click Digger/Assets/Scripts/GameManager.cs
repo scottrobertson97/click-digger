@@ -9,12 +9,15 @@ public class GameManager : MonoBehaviour {
 	private int goldDisplayed = 0;
 	private double goldPerSecond = 0;
 	private double clickMultiplier = 1;
-	private int currentMineIndex;
-	private List<Mine> mines;
+	private int currentMineIndex = 0;
+	private List<Mine> mines = new List<Mine> ();
 	private enum Stage {Mine, Planet, Solarsystem, Galaxy};
-	private Stage stage;
+	private Stage stage = Stage.Mine;
 	#endregion
 
+	/// <summary>
+	/// Miner object, has a cost and gold per second
+	/// </summary>
 	public struct Miner {
 		private double gps;
 		private int cost;
@@ -41,13 +44,12 @@ public class GameManager : MonoBehaviour {
 	public Mine CurrentMine{ get { return mines [currentMineIndex]; } }
 	#endregion
 
-	public Dictionary<string, Miner> miners;
-
 	#region Miners
 	public Dictionary<string, Miner> minersMine = new Dictionary<string, Miner>{
 		{"Dwarf", new Miner(1, 10)},
 		{"Big Dwarf", new Miner(10, 100)},
-		{"Digging Machine", new Miner(100, 1000)}
+		{"Digging Machine", new Miner(100, 1000)},
+		{"Train Extractor", new Miner(1000, 10000)}
 	};
 
 	public Dictionary<string, Miner> minersPlanet = new Dictionary<string, Miner>{
@@ -69,24 +71,37 @@ public class GameManager : MonoBehaviour {
 	};
 	#endregion
 
+	public Dictionary<string, Miner> Miners{
+		get{ 
+			switch (this.stage) {
+			case Stage.Mine:
+				return this.minersMine;
+			case Stage.Planet:
+				return this.minersPlanet;
+			case Stage.Solarsystem:
+				return this.minersSolarsystem;
+			case Stage.Galaxy:
+				return this.minersGalaxy;
+			}
+			return null;
+		}
+	}
+
 	// Usethis for initialization
 	void Start () {
-		stage = Stage.Mine;
-		miners = new Dictionary<string, Miner> (minersMine);
-		this.mines = new List<Mine> ();
+		this.stage = Stage.Mine;
 		CreateMine ();
-		currentMineIndex = 0;
-		CurrentMine.Init ();
-		GameObject.Find ("UIManager").GetComponent<UIManager> ().Init ();
+		//CurrentMine.Init ();
+		//GameObject.Find ("UIManager").GetComponent<UIManager> ().Init ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		goldDisplayed = (int)gold;
+		this.goldDisplayed = (int)this.gold;
 
-		goldPerSecond = 0;
+		this.goldPerSecond = 0;
 		foreach (Mine m in mines) {
-			goldPerSecond += m.GoldPerSecond;
+			this.goldPerSecond += m.GoldPerSecond;
 		}
 
 		#if UNITY_EDITOR
@@ -142,7 +157,7 @@ public class GameManager : MonoBehaviour {
 
 	public void CreateMine(){
 		Mine m = gameObject.AddComponent<Mine> () as Mine;
-		mines.Add (m);
+		this.mines.Add (m);
 	}
 
 	public void GoToMineAtIndex(int index){
@@ -150,28 +165,25 @@ public class GameManager : MonoBehaviour {
 			currentMineIndex = index;
 	}
 
+	/// <summary>
+	/// Advances the stage of the game
+	/// </summary>
 	public void AdvanceStage(){
-		switch (stage) {
+		switch (this.stage) {
 		case Stage.Mine:
-			stage = Stage.Planet;
-			//miners = minersPlanet;
-			miners = new Dictionary<string, Miner> (minersPlanet);
+			this.stage = Stage.Planet;
 			break;
 		case Stage.Planet:
-			stage = Stage.Solarsystem;
-			//miners = minersSolarsystem;
-			miners = new Dictionary<string, Miner> (minersSolarsystem);
+			this.stage = Stage.Solarsystem;
 			break;
 		case Stage.Solarsystem:
-			stage = Stage.Galaxy;
-			//miners = minersGalaxy;
-			miners = new Dictionary<string, Miner> (minersGalaxy);
+			this.stage = Stage.Galaxy;
 			break;
 		case Stage.Galaxy:
-			break;
+			return;
 		}
 
-		GameObject.Find ("UIManager").GetComponent<UIManager> ().Init ();
 		CurrentMine.Init ();
+		GameObject.Find ("UIManager").GetComponent<UIManager> ().Init ();
 	}
 }

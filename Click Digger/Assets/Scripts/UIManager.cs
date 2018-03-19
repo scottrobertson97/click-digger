@@ -16,6 +16,7 @@ public class UIManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		gameManager = GameObject.Find ("GameManager").GetComponent<GameManager> ();
+		Init ();
 	}
 	
 	// Update is called once per frame
@@ -29,11 +30,11 @@ public class UIManager : MonoBehaviour {
 	/// Delete all the panels, and create new ones
 	/// </summary>
 	public void Init(){
-		//foreach (Transform panel in content.transform) {
-		//	GameObject.Destroy(panel.gameObject);
-		//}
+		foreach (Transform panel in content.transform) {
+			GameObject.Destroy(panel.gameObject);
+		}
 
-		foreach (string type in gameManager.miners.Keys) {
+		foreach (string type in gameManager.Miners.Keys) {
 			GameObject panel = Instantiate (clickPanelPrefab, content.transform);
 			panel.GetComponent<ClickPanel> ().Initialize (type);
 		}
