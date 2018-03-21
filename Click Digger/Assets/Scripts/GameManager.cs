@@ -71,6 +71,10 @@ public class GameManager : MonoBehaviour {
 	};
 	#endregion
 
+	/// <summary>
+	/// Gets the miners.
+	/// </summary>
+	/// <value>The miners.</value>
 	public Dictionary<string, Miner> Miners{
 		get{ 
 			switch (this.stage) {
@@ -182,8 +186,13 @@ public class GameManager : MonoBehaviour {
 		case Stage.Galaxy:
 			return;
 		}
-
-		CurrentMine.Init ();
+		//destorys all mines
+		mines.Clear ();
+		//cretaes 1
+		CreateMine ();
+		//set index
+		currentMineIndex = 0;
+		//init UI
 		GameObject.Find ("UIManager").GetComponent<UIManager> ().Init ();
 	}
 }
