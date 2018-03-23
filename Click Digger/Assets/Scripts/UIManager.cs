@@ -6,8 +6,11 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour {
 	public GameObject clickPanelPrefab;
 	public GameObject content;
+	//gold per second text
 	public GameObject gpsText;
+	//displayed gold
 	public GameObject goldText;
+	//text on click button
 	public GameObject clickText;
 
 
@@ -21,6 +24,7 @@ public class UIManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//
 		gpsText.GetComponent<Text>().text = gameManager.GoldPerSecond + " Gps";
 		goldText.GetComponent<Text> ().text = gameManager.GoldDisplayed + " Gold";
 		clickText.GetComponent<Text> ().text = "+" + gameManager.ClickMultiplier + " Gold";

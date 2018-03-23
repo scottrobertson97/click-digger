@@ -186,6 +186,8 @@ public class GameManager : MonoBehaviour {
 		case Stage.Galaxy:
 			return;
 		}
+		foreach (Mine m in mines)
+			Destroy (m);
 		//destorys all mines
 		mines.Clear ();
 		//cretaes 1
