@@ -30,7 +30,7 @@ public class Mine : MonoBehaviour {
 		goldPerSecond = 0;
 		//summ the GPS of all the miners
 		foreach (string type in minersCount.Keys) {
-			goldPerSecond += minersCount [type] * gameManager.Miners [type].GPS;
+			goldPerSecond += minersCount [type] * gameManager.Miners [type].GPS * gameManager.Miners [type].Level;
 		}
 		gameManager.Earn (goldPerSecond * Time.deltaTime);
 	}

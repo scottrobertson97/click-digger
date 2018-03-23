@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour {
 	public struct Miner {
 		private double gps;
 		private int cost;
+        private double level;
 
 		public double GPS {
 			get { return gps; }
@@ -31,10 +32,21 @@ public class GameManager : MonoBehaviour {
 			get { return cost; }
 		}
 
-		public Miner(double gps, int cost){
+        public double Level
+        {
+            get { return level; }
+        }
+
+        public Miner(double gps, int cost, double level){
 			this.gps = gps;
 			this.cost = cost;
+            this.level = level;
 		}
+
+        public void LevelUp()
+        {
+            if(level <= 3)level++;
+        }
 	};
 
 	#region Properties
@@ -46,28 +58,28 @@ public class GameManager : MonoBehaviour {
 
 	#region Miners
 	public Dictionary<string, Miner> minersMine = new Dictionary<string, Miner>{
-		{"Dwarf", new Miner(1, 10)},
-		{"Big Dwarf", new Miner(10, 100)},
-		{"Digging Machine", new Miner(100, 1000)},
-		{"Train Extractor", new Miner(1000, 10000)}
+		{"Dwarf", new Miner(1, 10, 1)},
+		{"Big Dwarf", new Miner(10, 100, 1)},
+		{"Digging Machine", new Miner(100, 1000, 1)},
+		{"Train Extractor", new Miner(1000, 10000, 1)}
 	};
 
 	public Dictionary<string, Miner> minersPlanet = new Dictionary<string, Miner>{
-		{"City Boring Machine", new Miner(1, 10)},
-		{"Island Leveler", new Miner(10, 100)},
-		{"Continent Eater", new Miner(100, 1000)}
+		{"City Boring Machine", new Miner(1, 10, 1)},
+		{"Island Leveler", new Miner(10, 100, 1)},
+		{"Continent Eater", new Miner(100, 1000, 1)}
 	};
 
 	public Dictionary<string, Miner> minersSolarsystem = new Dictionary<string, Miner>{
-		{"Orbital Mining Lazer", new Miner(1, 10)},
-		{"Planet Grinder", new Miner(10, 100)},
-		{"Anit-Matter Explosive Crew", new Miner(100, 1000)}
+		{"Orbital Mining Lazer", new Miner(1, 10, 1)},
+		{"Planet Grinder", new Miner(10, 100, 1)},
+		{"Anit-Matter Explosive Crew", new Miner(100, 1000, 1)}
 	};
 
 	public Dictionary<string, Miner> minersGalaxy = new Dictionary<string, Miner>{
-		{"Gravity Wave Extractor", new Miner(1, 10)},
-		{"Black Hole", new Miner(10, 100)},
-		{"Tesseract", new Miner(100, 1000)}
+		{"Gravity Wave Extractor", new Miner(1, 10, 1)},
+		{"Black Hole", new Miner(10, 100, 1)},
+		{"Tesseract", new Miner(100, 1000, 1)}
 	};
 	#endregion
 
@@ -155,7 +167,15 @@ public class GameManager : MonoBehaviour {
 		this.gold += cost;
 	}
 
-	public void Click(){
+    /// <summary>
+    /// Upgrade a type of Miner
+    /// </summary>
+    public void Upgrade(string type)
+    {
+        Miners[type] = new Miner(1, 10, Miners[type].Level + 1);
+    }
+
+    public void Click(){
 		this.gold += this.clickMultiplier;
 	}
 
