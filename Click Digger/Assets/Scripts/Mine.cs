@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Mine : MonoBehaviour {
+public class Mine : MonoBehaviour {/*
 	/// <summary>
 	/// Count of each type of miner this mine has
 	/// </summary>
-	private Dictionary<string, int> minersCount;
+	private List<int> minersCount;
 	private GameManager gameManager;
 	private double goldPerSecond = 0;
 
@@ -15,7 +15,11 @@ public class Mine : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		gameManager = GameObject.Find ("GameManager").GetComponent<GameManager> ();
-		Init ();
+		//fill this dictionary with the same keys from the gameManager.miners
+		this.minersCount = new List<int>();
+		for (int i = 0; i < gameManager.Miners.Count; i++) {
+			minersCount.Add ( 0);
+		}
 	}
 
 	// Update is called once per frame
@@ -28,6 +32,9 @@ public class Mine : MonoBehaviour {
 	/// </summary>
 	private void Earn(){
 		goldPerSecond = 0;
+		for (int i = 0; i < gameManager.Miners.Count; i++) {
+			minersCount.Add ( 0);
+		}
 		//summ the GPS of all the miners
 		foreach (string type in minersCount.Keys) {
 			//try{
@@ -78,13 +85,4 @@ public class Mine : MonoBehaviour {
 	public int GetAmountOfType(string type){
 		return minersCount [type];
 	}
-
-	public void Init(){
-		//fill this dictionary with the same keys from the gameManager.miners
-		this.minersCount = new Dictionary<string, int> ();
-		foreach (string type in gameManager.Miners.Keys) {
-			//set their counts to 0
-			minersCount.Add (type, 0);
-		}
-	}
-}
+*/}
