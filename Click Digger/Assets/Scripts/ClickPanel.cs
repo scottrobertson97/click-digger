@@ -38,13 +38,15 @@ public class ClickPanel : MonoBehaviour {
 	public void Upgrade(){
 		gameManager.Upgrade (minerIndex);
 		switch (gameManager.Miners [minerIndex].Level) {
-			case 4:
-				this.levels [2].GetComponent<Toggle> ().isOn = true;
-			case 3:
-				this.levels [1].GetComponent<Toggle> ().isOn = true;
-			case 2:
-				this.levels [0].GetComponent<Toggle> ().isOn = true;
-				break;
+		case 4:
+			this.levels [2].GetComponent<Toggle> ().isOn = true;
+			break;
+		case 3:
+			this.levels [1].GetComponent<Toggle> ().isOn = true;
+			break;
+		case 2:
+			this.levels [0].GetComponent<Toggle> ().isOn = true;
+			break;
 		}
 	}
 }

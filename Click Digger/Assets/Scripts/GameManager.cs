@@ -22,10 +22,16 @@ public class GameManager : MonoBehaviour {
 		private int level;
 
 		public double GPS {	get { return this.baseGPS * this.level; } }
-		public int Count{ get { return this.count; } }
+		public int Count{ 
+			get { return this.count; } 
+			set { this.count = value; } 
+		}
 		public int Cost { get { return this.baseCost * (this.count + 1) / 2; } }
 		public string Name{	get { return this.name; } }
-		public int Level{ get { return this.level; } }
+		public int Level{ 
+			get { return this.level; } 
+			set { this.level = value; }
+		}
 
 		public Miner(string name, int baseGPS, int baseCost){
 			this.name = name;
@@ -33,17 +39,6 @@ public class GameManager : MonoBehaviour {
 			this.baseCost = baseCost;
 			this.count = 0;
 			this.level = 1;
-		}
-
-		public void IncreaseCount(){
-			this.count++;
-		}
-		public void DecreaseCount(){
-			this.count--;
-		}
-		public void LevelUp(){
-			if (this.level < 4)
-				level++;
 		}
 	};
 
@@ -100,7 +95,9 @@ public class GameManager : MonoBehaviour {
 	public void Buy(int index){
 		if (this.miners [index].Cost <= this.gold) {
 			this.gold -= this.miners [index].Cost;
-			this.miners [index].IncreaseCount ();
+			Miner m = this.miners [index];
+			m.Count++;
+			this.miners [index] = m;
 		}
 	}
 
@@ -110,7 +107,9 @@ public class GameManager : MonoBehaviour {
 	/// <param name="cost">Cost.</param>
 	public void Sell(int index){
 		if (miners[index].Count > 0) {
-			this.miners[index].DecreaseCount();
+			Miner m = this.miners [index];
+			m.Count--;
+			this.miners [index] = m;
 			//get 80% of the cost back
 			this.gold += miners[index].Cost * 0.5;
 		}
@@ -121,6 +120,10 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void Upgrade(int index){
-		this.miners [index].LevelUp ();
+		if (this.miners [index].Level < 4) {
+			Miner m = this.miners [index];
+			m.Level++;
+			this.miners [index] = m;
+		}
 	}
 }
