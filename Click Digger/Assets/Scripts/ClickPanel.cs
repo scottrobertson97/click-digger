@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class ClickPanel : MonoBehaviour {
 	public GameObject amountText;
 	public GameObject gpsText;
+	public GameObject buyButton;
 	public List<GameObject> levels;
 	private static int MINER_INDEX = 0;
 	private int minerIndex;
@@ -25,10 +26,17 @@ public class ClickPanel : MonoBehaviour {
 	void Update () {
 		this.amountText.GetComponent<Text> ().text = gameManager.Miners[minerIndex].Count + " " + gameManager.Miners[minerIndex].Name + "s";
 		this.gpsText.GetComponent<Text> ().text = gameManager.Miners[minerIndex].GPS + " Gps";
+		if (gameManager.GoldDisplayed < gameManager.Miners [minerIndex].Cost)
+			buyButton.SetActive (false);
+		else
+			buyButton.SetActive (true);
 	}
 
 	public void Buy(){
-		gameManager.Buy (minerIndex);
+		if(gameManager.Buy (minerIndex)){
+		//reveal the next thing
+			gameManager.Progress = minerIndex + 1;
+		}
 	}
 
 	public void Sell(){
@@ -40,10 +48,10 @@ public class ClickPanel : MonoBehaviour {
 		switch (gameManager.Miners [minerIndex].Level) {
 		case 4:
 			this.levels [2].GetComponent<Toggle> ().isOn = true;
-			break;
+			goto case 3;
 		case 3:
 			this.levels [1].GetComponent<Toggle> ().isOn = true;
-			break;
+			goto case 2;
 		case 2:
 			this.levels [0].GetComponent<Toggle> ().isOn = true;
 			break;

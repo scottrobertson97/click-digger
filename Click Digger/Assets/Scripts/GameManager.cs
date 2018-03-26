@@ -6,9 +6,9 @@ public class GameManager : MonoBehaviour {
 	#region Private Variables
 	private double goldEarned = 0;
 	private double gold = 0;
-	private int goldDisplayed = 0;
 	private double goldPerSecond = 0;
 	private double clickMultiplier = 1;
+	private int progress = 0;
 	#endregion
 
 	/// <summary>
@@ -26,7 +26,9 @@ public class GameManager : MonoBehaviour {
 			get { return this.count; } 
 			set { this.count = value; } 
 		}
-		public int Cost { get { return this.baseCost * (this.count + 1) / 2; } }
+		//public int Cost { get { return this.baseCost + (int)(this.count * 0.5); } }
+		//this.baseCost * (goldPerSecond + this.GPS) / this.GPS;
+		public double Cost { get { return this.baseCost + this.count; } }
 		public string Name{	get { return this.name; } }
 		public int Level{ 
 			get { return this.level; } 
@@ -43,10 +45,14 @@ public class GameManager : MonoBehaviour {
 	};
 
 	#region Properties
-	public int GoldDisplayed{ get { return this.goldDisplayed; } }
+	public int GoldDisplayed{ get { return (int)this.gold; } }
 	public double GoldPerSecond{ get { return this.goldPerSecond; } }
 	public double ClickMultiplier{ get { return this.clickMultiplier; } }
-	public List<Miner> Miners{get{ return miners; } }
+	public List<Miner> Miners{get{ return this.miners; } }
+	public int Progress{
+		get{ return this.progress; }
+		set{ this.progress = value; }
+	}
 	#endregion
 
 	#region List of Miners
@@ -74,14 +80,14 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		Earn ();
-		this.goldDisplayed = (int)this.gold;
 	}
 
-	private void Earn(){
-		this.goldPerSecond = 0;
+	private void Earn(){		
+		double gps = 0;
 		for (int i = 0; i < this.miners.Count; i++) {
-			this.goldPerSecond += this.miners [i].Count * this.miners [i].GPS;
+			gps += this.miners [i].Count * this.miners [i].GPS;
 		}
+		this.goldPerSecond = gps;
 		double earned = this.goldPerSecond * Time.deltaTime;
 		this.goldEarned += earned;
 		this.gold += earned;
@@ -92,12 +98,15 @@ public class GameManager : MonoBehaviour {
 	/// if so, pay
 	/// </summary>
 	/// <param name="cost">Cost.</param>
-	public void Buy(int index){
+	public bool Buy(int index){
 		if (this.miners [index].Cost <= this.gold) {
 			this.gold -= this.miners [index].Cost;
 			Miner m = this.miners [index];
 			m.Count++;
 			this.miners [index] = m;
+			return true;
+		} else {
+			return false;
 		}
 	}
 
