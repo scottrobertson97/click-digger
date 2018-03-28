@@ -39,6 +39,9 @@ public class UIManager : MonoBehaviour {
 		gpsText.GetComponent<Text>().text = gameManager.GoldPerSecond + " Gps";
 		goldText.GetComponent<Text> ().text = gameManager.GoldDisplayed + " Gold";
 		clickText.GetComponent<Text> ().text = "+" + gameManager.ClickMultiplier + " Gold";
+
+		//if a new thing was bought, then the progress would increment
+		//so now reveal the next click panel
 		if (this.previousProgress != gameManager.Progress) {
 			this.previousProgress = gameManager.Progress;
 			for (int i = 0; i <= gameManager.Progress; i++)

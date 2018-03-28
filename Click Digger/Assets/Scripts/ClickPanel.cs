@@ -30,7 +30,7 @@ public class ClickPanel : MonoBehaviour {
 	void Update () {
 		this.amountText.GetComponent<Text> ().text = gameManager.Miners[minerIndex].Count + " " + gameManager.Miners[minerIndex].Name + "s";
 		this.gpsText.GetComponent<Text> ().text = gameManager.Miners[minerIndex].GPS + " Gps";
-        this.costText.GetComponent<Text>().text = gameManager.Miners[minerIndex].Cost + "Gold";
+        this.costText.GetComponent<Text>().text = gameManager.Miners[minerIndex].Cost + " Gold";
 		if (gameManager.GoldDisplayed < gameManager.Miners [minerIndex].Cost)
 			buyButton.SetActive (false);
 		else

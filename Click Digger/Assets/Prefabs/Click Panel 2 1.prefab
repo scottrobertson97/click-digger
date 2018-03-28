@@ -1151,7 +1151,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   amountText: {fileID: 1868921744016826}
   gpsText: {fileID: 1808720290775384}
+  buyButton: {fileID: 1243414963920770}
   costText: {fileID: 1886158519097652}
+  upLevel: {fileID: 1366052977707518}
   levels:
   - {fileID: 1196615474638578}
   - {fileID: 1334655016119760}
