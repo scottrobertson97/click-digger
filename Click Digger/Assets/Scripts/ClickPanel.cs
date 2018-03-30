@@ -4,10 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class ClickPanel : MonoBehaviour {
-	public GameObject amountText;
-	public GameObject gpsText;
-	public GameObject buyButton;
+    // panel info
+	public GameObject typeText;
     public GameObject costText;
+    public GameObject gpsText;
+
+    // audio
+    public AudioSource purchase;
+    public AudioSource upgrade;
+
+    public GameObject buyButton;
     public GameObject upLevel;
 	public List<GameObject> levels;
 	private static int MINER_INDEX = 0;
@@ -28,9 +34,11 @@ public class ClickPanel : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		this.amountText.GetComponent<Text> ().text = gameManager.Miners[minerIndex].Count + " " + gameManager.Miners[minerIndex].Name + "s";
-		this.gpsText.GetComponent<Text> ().text = gameManager.Miners[minerIndex].GPS + " Gps";
-        this.costText.GetComponent<Text>().text = gameManager.Miners[minerIndex].Cost + " Gold";
+        // changes to click panel design... type first, cost per unit/quantity second, gps third
+		this.typeText.GetComponent<Text>().text = gameManager.Miners[minerIndex].Name.ToString();
+        this.costText.GetComponent<Text>().text = "CpU: " + gameManager.Miners[minerIndex].Cost + " Qty: " + gameManager.Miners[minerIndex].Count;
+        this.gpsText.GetComponent<Text> ().text = "Yield: " + gameManager.Miners[minerIndex].GPS + " gps";
+
 		if (gameManager.GoldDisplayed < gameManager.Miners [minerIndex].Cost)
 			buyButton.SetActive (false);
 		else

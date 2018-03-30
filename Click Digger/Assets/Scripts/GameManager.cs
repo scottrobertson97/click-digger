@@ -9,8 +9,8 @@ public class GameManager : MonoBehaviour {
 	private double goldPerSecond = 0;
 	private double clickMultiplier = 1;
 	private int progress = 0;
-	#endregion
-
+    #endregion
+    
 	/// <summary>
 	/// Miner object, has a cost and gold per second
 	/// </summary>
@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour {
 		private int baseCost;
 		private int count;
 		private int level;
-
+        
 		public double GPS {	get { return this.baseGPS * this.level; } }
 		public int Count{ 
 			get { return this.count; } 
@@ -58,20 +58,22 @@ public class GameManager : MonoBehaviour {
 	#region List of Miners
 	private List<Miner> miners = new List<Miner> {
 		new Miner("Dwarf", 1, 10),
-		new Miner("Big Dwarf", 10, 100),
-		new Miner("Digging Machine", 100, 1000),
-		new Miner("Train Extractor", 1000, 10000),
-		new Miner("City Boring Machine", 10000, 100000),
-		new Miner("Island Leveler", 100000, 1000000),
-		new Miner("Continent Eater", 1000000, 10000000),
-		new Miner("Orbital Mining Lazer", 1000000, 10000000),
-		new Miner("Planet Grinder", 1000000, 10000000),
-		new Miner("Anit-Matter Explosive Crew", 1000000, 10000000),
-		new Miner("Gravity Wave Extractor", 1000000, 10000000),
-		new Miner("Black Hole", 1000000, 10000000),
-		new Miner("Tesseract", 1000000, 10000000)
+		new Miner("Big Dwarf", 10, 150),
+		new Miner("Digging Machine", 50, 750),
+		new Miner("Train Extractor", 100, 1750),
+		new Miner("City Boring Machine", 250, 5000),
+		new Miner("Island Leveler", 750, 10000),
+		new Miner("Continent Eater", 1000, 50000),
+		new Miner("Orbital Mining Lazer", 1500, 115000),
+		new Miner("Planet Grinder", 2500, 200000),
+		new Miner("Anti-Matter Drill", 7500, 350000),
+		new Miner("Gravity Waves", 12500, 450000),
+		new Miner("Black Hole", 25000, 650000),
+		new Miner("Tesseract", 50000, 950000)
 	};
-	#endregion
+    #endregion
+    public AudioSource purchase;
+    public AudioSource upgrade;
 
 	// Usethis for initialization
 	void Start () {
@@ -100,6 +102,7 @@ public class GameManager : MonoBehaviour {
 	/// <param name="cost">Cost.</param>
 	public bool Buy(int index){
 		if (this.miners [index].Cost <= this.gold) {
+            purchase.Play();
 			this.gold -= this.miners [index].Cost;
 			Miner m = this.miners [index];
 			m.Count++;
@@ -116,6 +119,7 @@ public class GameManager : MonoBehaviour {
 	/// <param name="cost">Cost.</param>
 	public void Sell(int index){
 		if (miners[index].Count > 0) {
+            purchase.Play();
 			Miner m = this.miners [index];
 			m.Count--;
 			this.miners [index] = m;
@@ -129,10 +133,16 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void Upgrade(int index){
-		if (this.miners [index].Level < 4) {
-			Miner m = this.miners [index];
-			m.Level++;
-			this.miners [index] = m;
-		}
+        if (this.miners[index].Count > 0)
+        {
+            if (this.miners[index].Level < 4)
+            {
+                upgrade.Play();
+                Miner m = this.miners[index];
+                m.Level++;
+                this.miners[index] = m;
+            }
+        }
+		
 	}
 }
