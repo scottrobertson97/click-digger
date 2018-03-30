@@ -212,6 +212,8 @@ public class GameManager : MonoBehaviour {
 			m.Level = 1;
 			this.miners [i] = m;
 		}
+
+		Save ();
 	}
 }
 
