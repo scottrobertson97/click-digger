@@ -295,7 +295,7 @@ GameObject:
   - component: {fileID: 222402617064638890}
   - component: {fileID: 114640757953120250}
   m_Layer: 5
-  m_Name: Amount
+  m_Name: Type
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -451,7 +451,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 36
+    m_FontSize: 34
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -830,7 +830,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 36
+    m_FontSize: 34
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -888,8 +888,8 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: c8f15a048fc41bd48b47aea5ee6f5455, type: 3}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 0f00637b24592464c88ffe4a95c1b46a, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -995,7 +995,7 @@ MonoBehaviour:
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 21300000, guid: e2633c1731ca0d54fb422b313478e34c, type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 972bc81041a732f44906d1d83af9b827, type: 3}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -1126,7 +1126,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 36
+    m_FontSize: 34
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -1149,10 +1149,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30744cf3df9c2974189ef6ab5926f173, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amountText: {fileID: 1868921744016826}
-  gpsText: {fileID: 1808720290775384}
-  buyButton: {fileID: 1243414963920770}
+  typeText: {fileID: 1868921744016826}
   costText: {fileID: 1886158519097652}
+  gpsText: {fileID: 1808720290775384}
+  purchase: {fileID: 82953927928999694, guid: 2c2691443ee08f14ebeb0176c5b30e9c, type: 2}
+  upgrade: {fileID: 82191810256359954, guid: 047c639e7b89919498f39d8911471a0e, type: 2}
+  buyButton: {fileID: 1243414963920770}
   upLevel: {fileID: 1366052977707518}
   levels:
   - {fileID: 1196615474638578}
