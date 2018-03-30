@@ -31,10 +31,35 @@ public class ClickPanel : MonoBehaviour {
 		this.amountText.GetComponent<Text> ().text = gameManager.Miners[minerIndex].Count + " " + gameManager.Miners[minerIndex].Name + "s";
 		this.gpsText.GetComponent<Text> ().text = gameManager.Miners[minerIndex].GPS + " Gps";
         this.costText.GetComponent<Text>().text = gameManager.Miners[minerIndex].Cost + " Gold";
+		this.upLevel.GetComponentInChildren<Text>().text = "x" + gameManager.Miners[minerIndex].Level.ToString();
+
 		if (gameManager.GoldDisplayed < gameManager.Miners [minerIndex].Cost)
 			buyButton.SetActive (false);
 		else
 			buyButton.SetActive (true);
+
+		switch (gameManager.Miners [minerIndex].Level) {
+		case 4:
+			this.levels [0].GetComponent<Toggle> ().isOn = true;
+			this.levels [1].GetComponent<Toggle> ().isOn = true;
+			this.levels [2].GetComponent<Toggle> ().isOn = true;
+			break;
+		case 3:
+			this.levels [0].GetComponent<Toggle> ().isOn = true;
+			this.levels [1].GetComponent<Toggle> ().isOn = true;
+			this.levels [2].GetComponent<Toggle> ().isOn = false;
+			break;
+		case 2:
+			this.levels [0].GetComponent<Toggle> ().isOn = true;
+			this.levels [1].GetComponent<Toggle> ().isOn = false;
+			this.levels [2].GetComponent<Toggle> ().isOn = false;
+			break;
+		default:
+			this.levels [0].GetComponent<Toggle> ().isOn = false;
+			this.levels [1].GetComponent<Toggle> ().isOn = false;
+			this.levels [2].GetComponent<Toggle> ().isOn = false;
+			break;
+		}
 	}
 
 	public void Buy(){
@@ -50,18 +75,5 @@ public class ClickPanel : MonoBehaviour {
 
 	public void Upgrade(){
 		gameManager.Upgrade (minerIndex);
-        this.upLevel.GetComponentInChildren<Text>().text = "x" + gameManager.Miners[minerIndex].Level.ToString();
-
-        switch (gameManager.Miners [minerIndex].Level) {
-		case 4:
-			this.levels [2].GetComponent<Toggle> ().isOn = true;
-			goto case 3;
-		case 3:
-			this.levels [1].GetComponent<Toggle> ().isOn = true;
-			goto case 2;
-		case 2:
-			this.levels [0].GetComponent<Toggle> ().isOn = true;
-			break;
-		}
 	}
 }

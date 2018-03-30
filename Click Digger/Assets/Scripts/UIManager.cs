@@ -44,8 +44,12 @@ public class UIManager : MonoBehaviour {
 		//so now reveal the next click panel
 		if (this.previousProgress != gameManager.Progress) {
 			this.previousProgress = gameManager.Progress;
-			for (int i = 0; i <= gameManager.Progress; i++)
-				clickPanels [i].SetActive (true);
+			for (int i = 0; i < this.clickPanels.Count; i++) {
+				if (i <= gameManager.Progress)
+					this.clickPanels [i].SetActive (true);
+				else
+					this.clickPanels [i].SetActive (false);
+			}
 		}
 	}
 }

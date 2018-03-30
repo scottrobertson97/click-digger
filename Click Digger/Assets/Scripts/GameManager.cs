@@ -1,5 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
@@ -9,6 +12,7 @@ public class GameManager : MonoBehaviour {
 	private double goldPerSecond = 0;
 	private double clickMultiplier = 1;
 	private int progress = 0;
+	private float timeBetweenSaves = 0;
 	#endregion
 
 	/// <summary>
@@ -75,11 +79,26 @@ public class GameManager : MonoBehaviour {
 
 	// Usethis for initialization
 	void Start () {
+		Load ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		#if UNITY_EDITOR
+		if(Input.GetKeyDown(KeyCode.S))
+			Save();
+		if(Input.GetKeyDown(KeyCode.L))
+			Load();
+		#endif
+
 		Earn ();
+
+		this.timeBetweenSaves -= Time.deltaTime;
+		if (this.timeBetweenSaves <= 0) {
+			this.timeBetweenSaves = 10;
+			Save ();
+			Debug.Log ("Save");
+		}
 	}
 
 	private void Earn(){		
@@ -135,4 +154,61 @@ public class GameManager : MonoBehaviour {
 			this.miners [index] = m;
 		}
 	}
+
+	public void Save(){
+		BinaryFormatter bf = new BinaryFormatter();
+		FileStream file = File.Create (Application.persistentDataPath + "/playerInfo.dat");
+
+		PlayerData data = new PlayerData ();
+		data.gold = this.gold;
+		data.goldEarned = this.goldEarned;
+		data.progress = this.progress;
+		data.miners = new int[this.miners.Count * 2];
+		for (int i = 0; i < this.miners.Count; i++) {
+			data.miners [i * 2] = this.miners [i].Count;
+			data.miners [i * 2 + 1] = this.miners [i].Level;
+		}
+
+		bf.Serialize (file, data);
+		file.Close ();
+	}
+
+	public void Load(){
+		if (File.Exists (Application.persistentDataPath + "/playerInfo.dat")) {
+			BinaryFormatter bf = new BinaryFormatter ();
+			FileStream file = File.Open (Application.persistentDataPath + "/playerInfo.dat", FileMode.Open);
+			PlayerData data = (PlayerData)bf.Deserialize (file);
+			file.Close ();
+
+			this.gold = data.gold;
+			this.goldEarned = data.goldEarned;
+			this.progress = data.progress;
+			for (int i = 0; i < this.miners.Count; i ++) {
+				Miner m = this.miners [i];
+				m.Count = data.miners [i * 2];
+				m.Level = data.miners [i * 2 + 1];
+				this.miners [i] = m;
+			}
+		}
+	}
+
+	public void Reset(){
+		this.gold = 0;
+		this.goldEarned = 0;
+		this.progress = 0;
+		for (int i = 0; i < this.miners.Count; i ++) {
+			Miner m = this.miners [i];
+			m.Count = 0;
+			m.Level = 1;
+			this.miners [i] = m;
+		}
+	}
+}
+
+[Serializable]
+class PlayerData{
+	public double gold;
+	public double goldEarned;
+	public int[] miners;
+	public int progress;
 }
