@@ -12,7 +12,8 @@ public class GameManager : MonoBehaviour {
 	private double goldPerSecond = 0;
 	private double clickMultiplier = 1;
 	private int progress = 0;
-	private float timeBetweenSaves = 0;
+    private float timeBetweenSaves = 0;
+    private double goldAddon;
 	#endregion
 
 	/// <summary>
@@ -24,8 +25,13 @@ public class GameManager : MonoBehaviour {
 		private int baseCost;
 		private int count;
 		private int level;
+        private double addon;
 
-		public double GPS {	get { return this.baseGPS * this.level; } }
+        public double Add{
+            get { return addon; }
+            set { addon = value; }
+        }
+		public double GPS {	get { return this.addon + this.baseGPS * this.level; } }
 		public int Count{ 
 			get { return this.count; } 
 			set { this.count = value; } 
@@ -45,8 +51,44 @@ public class GameManager : MonoBehaviour {
 			this.baseCost = baseCost;
 			this.count = 0;
 			this.level = 1;
+            this.addon = 0;
 		}
 	};
+
+    /// <summary>
+    /// ClickUpgrade object that is used to create/reveal buttons
+    /// </summary>
+    public struct ClickUpgrade{
+        public string description;
+        public float cost;
+        public char id;//Type of upgrade
+        public string data;
+        public bool active;//Should button be shown?
+
+        public ClickUpgrade(char id, string data, string description, int cost){
+            this.id = id;
+            this.data = data;
+            this.description = description;
+            this.cost = cost;
+            this.active = false;
+        }
+    }
+
+    //List of Upgrades
+    public List<ClickUpgrade> ClickUpgrades = new List<ClickUpgrade>
+    {
+        new ClickUpgrade('A',"2","Double click efficiency", 5000),//Type, Multiplier, Description, Cost
+        new ClickUpgrade('B',"021","For each Dwarf, Digging Machines +0.5", 500),//Type, index of counted miner | index of affected | multilier for addon ( x * 0.5), Description, Cost
+        new ClickUpgrade('C',"2","Total GPS +2%", 10000)//Type, Percentage, Description, Cost
+    };
+
+    //Rules for upgrades
+    public List<String> UpgradeRules = new List<String>
+    {
+        "A,200",//Type, needed GPS
+        "B,0,20",//Type, index of miner checked, needed count to unlock
+        "C,400"//Type, needed GPS
+    };
 
 	#region Properties
 	public int GoldDisplayed{ get { return (int)this.gold; } }
@@ -57,10 +99,10 @@ public class GameManager : MonoBehaviour {
 		get{ return this.progress; }
 		set{ this.progress = value; }
 	}
-	#endregion
+    #endregion
 
-	#region List of Miners
-	private List<Miner> miners = new List<Miner> {
+    #region List of Miners
+    private List<Miner> miners = new List<Miner> {
 		new Miner("Dwarf", 1, 10),
 		new Miner("Big Dwarf", 10, 100),
 		new Miner("Digging Machine", 100, 1000),
@@ -106,7 +148,7 @@ public class GameManager : MonoBehaviour {
 		for (int i = 0; i < this.miners.Count; i++) {
 			gps += this.miners [i].Count * this.miners [i].GPS;
 		}
-		this.goldPerSecond = gps;
+		this.goldPerSecond = gps + this.goldAddon;
 		double earned = this.goldPerSecond * Time.deltaTime;
 		this.goldEarned += earned;
 		this.gold += earned;
@@ -123,7 +165,10 @@ public class GameManager : MonoBehaviour {
 			Miner m = this.miners [index];
 			m.Count++;
 			this.miners [index] = m;
-			return true;
+
+            CheckUpgradeRules();//Check to see if Upgrade is unlocked
+
+            return true;
 		} else {
 			return false;
 		}
@@ -148,12 +193,69 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void Upgrade(int index){
-		if (this.miners [index].Level < 4) {
-			Miner m = this.miners [index];
+		if (this.miners [index].Level < 4 && this.miners[index].Cost * 5 * this.miners[index].Level <= this.gold) {
+            this.gold -= this.miners[index].Cost * 5 * this.miners[index].Level;
+            Miner m = this.miners [index];
 			m.Level++;
 			this.miners [index] = m;
 		}
 	}
+
+
+    /// <summary>
+    /// Check to see if Upgrades have been unlocked
+    /// </summary>
+    public void CheckUpgradeRules(){
+        for(int i = 0; i < UpgradeRules.Count; i++){
+            String[] vars = UpgradeRules[i].Split(',');
+            switch (UpgradeRules[i][0])
+            {
+                case 'A':
+                    if (this.goldPerSecond >= int.Parse(vars[1])){
+                        ClickUpgrade c = ClickUpgrades[i];
+                        c.active = true;
+                        ClickUpgrades[i] = c;
+                    };
+                    break;
+                case 'B':
+                    if(this.miners[int.Parse(vars[1])].Count >= int.Parse(vars[2])){
+                        ClickUpgrade c = ClickUpgrades[i];
+                        c.active = true;
+                        ClickUpgrades[i] = c;
+                    }
+                    break;
+                case 'C':
+                    if (this.goldPerSecond >= int.Parse(vars[1]))
+                    {
+                        ClickUpgrade c = ClickUpgrades[i];
+                        c.active = true;
+                        ClickUpgrades[i] = c;
+                    };
+                    break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Does effect of an Upgrade
+    /// </summary>
+    /// <param name="up"></param>
+    public void DoClickUpgrade(ClickUpgrade up){
+        switch (up.id)
+        {
+            case 'A':
+                clickMultiplier *= int.Parse(up.data); 
+                break;
+            case 'B':
+                Miner m = this.miners[int.Parse(up.data[1].ToString())];
+                m.Add = this.miners[int.Parse(up.data[0].ToString())].Count * (int.Parse(up.data[2].ToString()) * 0.5);
+                this.miners[int.Parse(up.data[1].ToString())] = m;
+                break;
+            case 'C':
+                this.goldAddon = this.goldPerSecond * up.data[0];
+                break;
+        }
+    }
 
 	public void Save(){
 		BinaryFormatter bf = new BinaryFormatter();

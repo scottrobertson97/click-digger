@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
 	public GameObject clickPanelPrefab;
+    public GameObject clickButtonPrefab;
 	public GameObject content;
+    public GameObject content2;
 	//gold per second text
 	public GameObject gpsText;
 	//displayed gold
@@ -13,12 +15,16 @@ public class UIManager : MonoBehaviour {
 	//text on click button
 	public GameObject clickText;
 	private List<GameObject> clickPanels;
+    public List<GameObject> clickUpgrades;
+
+    private bool active;
 
 	private GameManager gameManager;
 	private int previousProgress;
+    private int previousProgressUpgrades;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 		gameManager = GameObject.Find ("GameManager").GetComponent<GameManager> ();
 		clickPanels = new List<GameObject> ();
 		this.previousProgress = gameManager.Progress;
@@ -32,6 +38,19 @@ public class UIManager : MonoBehaviour {
 			//add it to the list
 			clickPanels.Add (panel);
 		}
+
+        //Instantiate buttons if revealed
+        clickUpgrades = new List<GameObject> ();
+        for(int i = 0; i < gameManager.ClickUpgrades.Count; i++){
+            GameObject button = Instantiate(clickButtonPrefab, content2.transform);
+            if (!gameManager.ClickUpgrades[i].active)
+            {
+                button.SetActive(true);
+            }
+            clickUpgrades.Add(button);
+        }
+
+        active = false;
 	}
 	
 	// Update is called once per frame
@@ -51,5 +70,22 @@ public class UIManager : MonoBehaviour {
 					this.clickPanels [i].SetActive (false);
 			}
 		}
-	}
+
+        //Show upgrade Buttons
+        for (int i = 0; i < this.clickUpgrades.Count; i++){
+            if (gameManager.ClickUpgrades[i].active)
+                this.clickUpgrades[i].SetActive(true);
+            else
+                this.clickUpgrades[i].SetActive(false);
+        }
+
+        content.SetActive(!active);
+        content2.SetActive(active);
+
+    }
+
+    //Switch content for scroll panel
+    public void SwitchContent(){
+        active = !active;
+    }
 }
